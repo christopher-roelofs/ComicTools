@@ -1,0 +1,9 @@
+{
+    "publishers": {
+        "Marvel": "Marvel Comics",
+        "DC": "DC Comics",
+        "Image": "Image Comics",
+        "Image - Skybound": "Skybound",
+        "IDW Publishing": "IDW"
+    }
+}

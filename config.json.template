@@ -1,0 +1,16 @@
+{
+    "remove_scene_promo": true,
+    "remove_comixology_meta": true,
+    "remove_subfolders": true,
+    "write_metadata": "merge_new",
+    "library_location": "Y:\\Library",
+    "keep_original": true,
+    "compare_covers": true,
+    "comicvine_key": "",
+    "comic_database": "locg",
+    "from_pdf_zoom": 4,
+    "archive_type": "cbz",
+    "metadata_type": "ComicInfo.xml",
+    "image_type": "jpg",
+    "rename_template": "{publisher}{seperator}{series} ({series_year}){seperator}{series} #{issue_pad3} ({issue_year})"
+}
