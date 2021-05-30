@@ -1,5 +1,5 @@
 # ComicTools
-A set of tools for working with digital comics
+A set of tools for working with digital comics. Searching and tagging works best for individial issues, Volumes and TBPs tend not to return results when searching. Please use Comicvine if you are tagging a lot of comics. For small batches of recent comics, League of Comic Geeks is usually the fastest to update.
 
 **Main Menu**
 
@@ -31,7 +31,7 @@ Remove scene promos allows you to select a single comic or a folder of comics to
 
 **Change Comic Database**
 
-This setting allows you to change the backend used to get comic details. The options are Comicvine,Comixology and League of Comic Geeks. The default is set in the config.
+This setting allows you to change the backend used to get comic details. The options are Comicvine,Comixology and League of Comic Geeks. The default is set in the config. **This change is only for runtime and will not be saved back to the config.**
 
 **List Supported Archive Types**
 
