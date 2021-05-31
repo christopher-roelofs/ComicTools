@@ -59,7 +59,8 @@ def get_issue_by_id(id):
     
 def get_series_by_id(id):
     issue_list = []
-    url = f"{baseUrl}/comic/get_comics?addons=1&list=series&list_option=&user_id=0&view=thumbs&format%5B%5D=1&format%5B%5D=5&date_type=&date=&date_end=&series_id={id}&creators=0&character=&title=&order=date-desc&_={calendar.timegm(time.gmtime())}"
+    #url = f"{baseUrl}/comic/get_comics?addons=1&list=series&list_option=&user_id=0&view=thumbs&format%5B%5D=1&format%5B%5D=5&date_type=&date=&date_end=&series_id={id}&creators=0&character=&title=&order=date-desc&_={calendar.timegm(time.gmtime())}"
+    url = f"{baseUrl}/comic/get_comics?addons=1&list=series&list_option=&user_id=0&view=thumbs&format%5B%5D=1&date_type=&date=&date_end=&series_id={id}&creators=0&character=&title=&order=date-desc&_={calendar.timegm(time.gmtime())}"
     response = requests.get(url,headers=headers)
     soup = BeautifulSoup(json.loads(response.text)["list"], 'html.parser')
     issues = soup.find_all("li")
@@ -89,7 +90,9 @@ def get_series_by_id(id):
 def search_series(query,volumeConfidence=0,issueConfidence=0):
     results = []
     comic_details = comicutil.get_comic_details(query)
-    url = f"{baseUrl}/comic/get_comics?addons=1&list=search&list_option=series&user_id=0&view=thumbs&format%5B%5D=1&format%5B%5D=6&format%5B%5D=5&format%5B%5D=2&format%5B%5D=3&format%5B%5D=4&date_type=&date=&date_end=&series_id=0&creators=0&character=0&title={urllib.parse.quote(comic_details.series)}&order=alpha-asc&filterCreator=1&filterCharacter=1&_={calendar.timegm(time.gmtime())}"
+    #url = f"{baseUrl}/comic/get_comics?addons=1&list=search&list_option=series&user_id=0&view=thumbs&format%5B%5D=1&format%5B%5D=6&format%5B%5D=5&format%5B%5D=2&format%5B%5D=3&format%5B%5D=4&date_type=&date=&date_end=&series_id=0&creators=0&character=0&title={urllib.parse.quote(comic_details.series)}&order=alpha-asc&filterCreator=1&filterCharacter=1&_={calendar.timegm(time.gmtime())}"
+    url = f"{baseUrl}/comic/get_comics?addons=1&list=search&list_option=series&user_id=0&view=thumbs&format%5B%5D=1&date_type=&date=&date_end=&series_id=0&creators=0&character=0&title={urllib.parse.quote(comic_details.series)}&order=alpha-asc&filterCreator=1&filterCharacter=1&_={calendar.timegm(time.gmtime())}"
+
     try:
         response = requests.get(url,headers=headers)
     except Exception as e:
