@@ -1,5 +1,5 @@
 # ComicTools
-A set of tools for working with digital comics. Searching and tagging works best for individial issues, Volumes and TBPs tend not to return results when searching. Please use Comicvine if you are tagging a lot of comics. For small batches of recent comics, League of Comic Geeks is usually the fastest to update.
+A set of tools for working with digital comics. Searching and tagging works best for individual issues, Volumes and TBPs tend not to return results when searching. Please use Comicvine if you are tagging a lot of comics. For small batches of recent comics, League of Comic Geeks is usually the fastest to update.
 
 **Main Menu**
 
