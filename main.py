@@ -3,7 +3,9 @@ from tkinter import *
 import copy
 import shutil
 import sys
+import json
 import os
+from pathlib import Path
 import locg
 import comicvine
 import comicutil
@@ -28,6 +30,12 @@ IMAGE_TYPE = SETTINGS['image_type']
 RENAME_TEMPLATE = SETTINGS['rename_template']
 COMIC_DATABASE = SETTINGS["comic_database"]
 WRITE_METADATA = SETTINGS["write_metadata"] # true, false, overwrite, merge_existing, merge_new
+
+VERSION = ""
+if os.path.exists(Path(__file__).parent.joinpath("version.json")):
+    with open(Path(__file__).parent.joinpath("version.json")) as version_text:
+        version_json = json.load(version_text)
+        VERSION = version_json['version']
 
 
 def screen_clear():
@@ -403,12 +411,14 @@ def search_and_tag_interactive():
 
 def main_menu():
     print("============================================================================")
+    print(f"                           ComicTools {VERSION}")
+    print("============================================================================")
     print("What would like to do? default: 1")
     print("")
-    print("1: Tag and organize.")
-    print("2: Convert archive type.")
-    print("3: Convert image type.")
-    print("4: Remove scene promos.")
+    print("1: Tag and Organize.")
+    print("2: Convert Archive Yype.")
+    print("3: Convert Image Type.")
+    print("4: Remove Scene Promos.")
     print("5: Change Comic Database.")
     print("6: List Supported Archive Types.")
     print("7: Quit.")

@@ -1,1 +1,3 @@
 icon - Comic Book by Carlo Cariño from the Noun Project
+https://github.com/wummel/patool
+https://github.com/AVeenstra/Images_To_ePub

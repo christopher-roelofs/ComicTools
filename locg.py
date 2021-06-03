@@ -18,6 +18,8 @@ baseUrl = 'https://leagueofcomicgeeks.com'
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
 def get_issue_by_id(id):
+    page_count = "UNKOWN"
+    price = "UNKNOWN"
     response = requests.get(id,headers=headers)
     soup = BeautifulSoup(response.text, 'html.parser')
     description = ""
@@ -26,8 +28,14 @@ def get_issue_by_id(id):
     except:
         pass
     details_section = soup.find_all("div", {"class": "col-xxl-4 col-lg-6 col-6 mb-3 details-addtl-block"})
-    page_count = details_section[1].find("div", {"class": "value"}).contents[0].strip().split()[0]
-    price = details_section[2].find("div", {"class": "value"}).contents[0].strip().split()[0]
+    try:
+        page_count = details_section[1].find("div", {"class": "value"}).contents[0].strip().split()[0]
+    except:
+        pass
+    try:
+        price = details_section[2].find("div", {"class": "value"}).contents[0].strip().split()[0]
+    except:
+        pass
     creators_section = soup.find_all("div", {"class": "d-flex flex-column align-self-center"})
     credits = []
     for creator in creators_section:

@@ -1,5 +1,10 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+import os
+import json
+import shutil
+
+
 
 block_cipher = None
 
@@ -7,7 +12,7 @@ block_cipher = None
 a = Analysis(['main.py'],
              pathex=['./'],
              binaries=[],
-             datas=[('templates','templates')],
+             datas=[('templates','templates'),('version.json','.')],
              hiddenimports=[],
              hookspath=['./hooks'],
              runtime_hooks=[],
@@ -24,7 +29,7 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
           [],
-          name='ComicTools',
+          name=f'ComicTools',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
@@ -34,7 +39,5 @@ exe = EXE(pyz,
           icon='./icon.ico',
           console=True )
 
-
-import shutil
 shutil.copyfile('config.json.template', '{0}/config.json'.format(DISTPATH))
 shutil.copyfile('comicdb.json', '{0}/comicdb.json'.format(DISTPATH))
