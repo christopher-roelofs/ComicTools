@@ -7,7 +7,7 @@
     "keep_original": true,
     "compare_covers": true,
     "comicvine_key": "",
-    "comic_database": "locg",
+    "comic_database": "comicvine",
     "from_pdf_zoom": 4,
     "archive_type": "cbz",
     "metadata_type": "ComicInfo.xml",
