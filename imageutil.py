@@ -32,8 +32,6 @@ def convert_image(file,type):
             return True
 
         elif type == "jpg":
-            if extension == "jpeg":
-                return True
             image.save(f"{basename}.jpg",quality=95,optimize=True)
             return True
 
