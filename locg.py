@@ -24,7 +24,7 @@ def get_issue_by_id(id):
     soup = BeautifulSoup(response.text, 'html.parser')
     description = ""
     try:
-        description = re.sub('<[^<]+?>', '', soup.find("div", {"class": "col-12 listing-description"}).text).replace("\n","").replace("\r","").replace("\t","")
+        description = re.sub('<[^<]+?>', '', soup.find("div", {"class": "col-12 listing-description"}).text).replace("\n","").replace("\r","").replace("\t","").strip()
     except:
         pass
     details_section = soup.find_all("div", {"class": "col-xxl-4 col-lg-6 col-6 mb-3 details-addtl-block"})
