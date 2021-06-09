@@ -111,22 +111,25 @@ def convert_to(oldfile,newfile,metadata=None,image_type=IMAGE_TYPE):
             try: 
                 meta = comicutil.comicdb_to_meta(metadata)
                 metas = comicutil.get_meta_from_dir(tmp)
-                for m in comicutil.metadata_files:
-                    if metas[METADATA_TYPE] == "" and WRITE_METADATA:
-                        comicutil.write_meta_to_dir(meta,tmp,METADATA_TYPE)
-                    elif metas[METADATA_TYPE] != "" and WRITE_METADATA == "overwrite":
-                        comicutil.write_meta_to_dir(meta,tmp,METADATA_TYPE)
-                    elif metas[METADATA_TYPE] != "" and WRITE_METADATA:
-                        if METADATA_TYPE == "ComicInfo.xml":
-                            xml1 = comicinfoxml.ComicInfoXml().stringFromMetadata(metas[METADATA_TYPE])
-                            xml2 = comicinfoxml.ComicInfoXml().stringFromMetadata(meta)
-                            xml3 = ""
-                            if WRITE_METADATA == "merge_new":
-                                xml3 = comicutil.merge_meta_xml(xml1,xml2,"xml1")
-                            if WRITE_METADATA == "merge_existing":
-                                xml3 = comicutil.merge_meta_xml(xml1,xml2,"xml2")
-                            new_meta = comicinfoxml.ComicInfoXml().metadataFromString(xml3)
-                            comicutil.write_meta_to_dir(new_meta,tmp,METADATA_TYPE)
+                if metas[METADATA_TYPE] == "" and WRITE_METADATA:
+                    comicutil.write_meta_to_dir(meta,tmp,METADATA_TYPE)
+                    print("Writing new metadata.")
+                elif metas[METADATA_TYPE] != "" and WRITE_METADATA == "overwrite":
+                    comicutil.write_meta_to_dir(meta,tmp,METADATA_TYPE)
+                    print("Writing over existing metadata.")
+                elif metas[METADATA_TYPE] != "" and WRITE_METADATA:
+                    if METADATA_TYPE == "ComicInfo.xml":
+                        xml1 = comicinfoxml.ComicInfoXml().stringFromMetadata(metas[METADATA_TYPE])
+                        xml2 = comicinfoxml.ComicInfoXml().stringFromMetadata(meta)
+                        xml3 = ""
+                        if WRITE_METADATA == "merge_new":
+                            xml3 = comicutil.merge_meta_xml(xml1,xml2,"xml1")
+                            print("Merged new metadata into existing.")
+                        if WRITE_METADATA == "merge_existing":
+                            xml3 = comicutil.merge_meta_xml(xml1,xml2,"xml2")
+                            print("Merged existing metadata into new.")
+                        new_meta = comicinfoxml.ComicInfoXml().metadataFromString(xml3)
+                        comicutil.write_meta_to_dir(new_meta,tmp,METADATA_TYPE)
             except Exception as e:
                 print(f"Failed to write metadata to directory: {repr(e)}")
                 
