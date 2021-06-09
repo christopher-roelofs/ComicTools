@@ -66,6 +66,7 @@ Images_To_ePub (https://github.com/AVeenstra/Images_To_ePub) - used for creating
 * remove_scene_promo - Removes scene promo images files from archive. The list of names is hard coded and if one isn't found, it will list potential ones that can be removed manually.
 * remove_comixology_meta - The Comixology Backup Extension for Chrome (https://github.com/Cortys/comic-backup) adds a file to the archives to identify the person making the backup. This removes the file.
 * remove_subfolders - This will remove any subfolders in the archive and move the files to the root.
+* remove_hashed_files - This will remove files that match the sha256 hashes in the hashed_files list in the comictutil.json file.
 * write_metadata - If set to true, metadata will be written to the folder if none exists. If set to false no metadata will be written. if set to overwrite, metadata will overwrite exisiting ones. If set to merge_existing, medata will be merged and exisitng entries will take prioroty. If set to merge_new, metadata will be mrged and new metadata will take priorty.
 * library_location - Location of the library.
 * keep_original - If set to true, selected file will be kept unless the source is same as target.
@@ -120,6 +121,42 @@ This is used to keep the names from the different backend the same. Only publish
         "Image": "Image Comics",
         "Image - Skybound": "Skybound",
         "IDW Publishing": "IDW"
+    }
+}
+```
+
+**comicutil.json**
+
+This is used to store the hashed_files,scene_promos and metadata files.
+
+
+```json
+{
+    "scene_groups": [
+        "zWater",
+        "zzz-mephisto",
+        "zSoU-Nerd",
+        "zzoronewtag10",
+        "zzoroboros",
+        "zzzGlorithSolo",
+        "ZZZZZ",
+        "zzGGtag",
+        "zDream",
+        "zzorostnick11",
+        "zEmpire-DrDoom",
+        "zzzNeverAngel-Empire",
+        "zzzDQzzz",
+        "zzForsythe"
+    ],
+    "metadata_files": [
+        "ComicInfo.xml",
+        "ComicBookInfo.json",
+        "CoMet.xml"
+    ],
+    "hashed_files": {
+        "AFF3592205B673B198BDE35876DAC1D1541B5188931C325DF46B3F823A3F4887": "comixology presents.jpeg",
+        "629B51E13107C44C9E73145FB357A65B39CCA7C38BE005B866EC2CC22397E0A7": "comixology presents.jpeg",
+        "46C0228B7E8F1BC76A5F44F69A2AD98EADEEA4287ECBBC37EAD544E6E8E790E8": "comixology presents.jpeg"
     }
 }
 ```
