@@ -2,6 +2,7 @@
     "remove_scene_promo": true,
     "remove_comixology_meta": true,
     "remove_subfolders": true,
+    "remove_hashed_files": true,
     "write_metadata": "merge_new",
     "library_location": "Y:\\Library",
     "keep_original": true,

@@ -5,7 +5,9 @@ from PIL import Image
 from comicapi import comicinfoxml, filenameparser
 import tempfile
 import shutil
+import hashlib
 import io
+import json
 import xml.etree.ElementTree as ET
 import fitz # PyMuPDF
 import config
@@ -13,8 +15,20 @@ import archiveutil
 
 SETTINGS = config.get_config() 
 
-scene_groups = ['zWater','zzz-mephisto','zSoU-Nerd','zzoronewtag10','zzoroboros','zzzGlorithSolo','ZZZZZ','zzGGtag','zDream','zzorostnick11','zEmpire-DrDoom','zzzNeverAngel-Empire','zzzDQzzz','zzForsythe']
-metadata_files = ["ComicInfo.xml","ComicBookInfo.json","CoMet.xml"]
+scene_groups = []
+metadata_files = []
+hashed_files = {}
+
+if os.path.exists("comicutil.json"):
+    with open("comicutil.json") as json_text:
+        comicutil_json = json.load(json_text)
+        if "scene_groups" in comicutil_json:
+            scene_groups = comicutil_json["scene_groups"]
+        if "metadata_files" in comicutil_json:
+            metadata_files = comicutil_json["metadata_files"]
+        if "hashed_files" in comicutil_json:
+            hashed_files = comicutil_json["hashed_files"]
+        
 
 
 def remove_issue_number(filename):
@@ -70,6 +84,18 @@ def get_meta_from_dir(dir):
                     metas["ComicInfo.xml"] = meta
     return metas
 
+def remove_hashed_files_from_dir(dir):
+    for subdir, dirs, files in os.walk(dir):
+        for file in files:
+            filepath = subdir + os.sep + file
+            with open(filepath,"rb") as f:
+                bytes = f.read() # read entire file as bytes
+                readable_hash = hashlib.sha256(bytes).hexdigest().upper()
+                if readable_hash in hashed_files:
+                    print(f"Removing the following known hashed files: {hashed_files[readable_hash]}: {readable_hash}")
+                    f.close()
+                    os.remove(filepath)
+
 def merge_meta_xml(xml1,xml2,priority):
     xml1 = ET.fromstring(xml1)
     xml2 = ET.fromstring(xml2)
@@ -81,7 +107,7 @@ def merge_meta_xml(xml1,xml2,priority):
                 found.text = i.text
             else:
                 xml2.append(i)
-        return ET.tostring(xml2, encoding='utf8', method='xml')
+        return ET.tostring(xml2, encoding='utf8', method='xml').decode()
     else:
         for i in xml2:
             found = xml1.find(i.tag)
@@ -89,7 +115,7 @@ def merge_meta_xml(xml1,xml2,priority):
                 found.text = i.text
             else:
                 xml1.append(i)
-        return ET.tostring(xml1, encoding='utf8', method='xml')
+        return ET.tostring(xml1, encoding='utf8', method='xml').decode()
 
 def write_meta_to_dir(metadata,dir,type):
     try:
@@ -209,4 +235,4 @@ def get_cover_from_dir(dir):
     return img
 
 if __name__ == "__main__":
-    pass
+    remove_hashed_files_from_dir("D:\Downloads\AFTERLIFT (comiXology Originals) #1 (of 5)")

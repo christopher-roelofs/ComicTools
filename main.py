@@ -20,6 +20,7 @@ SETTINGS = config.get_config()
 REMOVE_SCENE_PROMO = SETTINGS["remove_scene_promo"]
 REMOVE_SUBFOLDERS = SETTINGS["remove_subfolders"]
 REMOVE_COMIXOLOGY_META = SETTINGS["remove_comixology_meta"]
+REMOVE_HASHED_FILES = SETTINGS["remove_hashed_files"]
 LIBRARY_LOCATION = SETTINGS["library_location"]
 KEEP_ORIGINAL = SETTINGS["keep_original"]
 COMPARE_COVERS = SETTINGS["compare_covers"]
@@ -29,7 +30,7 @@ METADATA_TYPE = SETTINGS['metadata_type']
 IMAGE_TYPE = SETTINGS['image_type']
 RENAME_TEMPLATE = SETTINGS['rename_template']
 COMIC_DATABASE = SETTINGS["comic_database"]
-WRITE_METADATA = SETTINGS["write_metadata"] # true, false, overwrite, merge_existing, merge_new
+WRITE_METADATA = SETTINGS["write_metadata"] 
 
 VERSION = ""
 if os.path.exists(Path(__file__).parent.joinpath("version.json")):
@@ -89,6 +90,14 @@ def convert_to(oldfile,newfile,metadata=None,image_type=IMAGE_TYPE):
                 comicutil.remove_comixology_meta_from_dir(tmp)
             except Exception as e:
                 print(f"Error removing promos: {e}")
+                shutil.rmtree(tmp)
+                return False
+
+        if REMOVE_HASHED_FILES:
+            try:
+                comicutil.remove_hashed_files_from_dir(tmp)
+            except Exception as e:
+                print(f"Error removing hashed files: {e}")
                 shutil.rmtree(tmp)
                 return False
 

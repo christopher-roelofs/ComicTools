@@ -41,3 +41,4 @@ exe = EXE(pyz,
 
 shutil.copyfile('config.json.template', '{0}/config.json'.format(DISTPATH))
 shutil.copyfile('comicdb.json', '{0}/comicdb.json'.format(DISTPATH))
+shutil.copyfile('comicutil.json', '{0}/comicutil.json'.format(DISTPATH))
