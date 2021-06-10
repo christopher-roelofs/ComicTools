@@ -65,6 +65,25 @@ def getYearFromVolume(name):
     except:
         return ""
 
+def _get_issue_number(name):
+    if "#" in name:
+        split = name.split()
+        for part in split:
+            if "#" in part:
+                return re.sub("[^0-9]", "", part)
+        return ""
+    else:
+        return ""
+
+def get_issue_number(issue):
+    issue_number = ""
+    fnp = filenameparser.FileNameParser()
+    fnp.parseFilename(issue)
+    issue_number = fnp.issue
+    if fnp.issue == "":
+        issue_number = _get_issue_number(issue)
+    return issue_number
+
 def is_image(file):
     try:
         Image.open(file)
@@ -218,11 +237,6 @@ def remove_comixology_meta_from_dir(dir):
                 os.remove(filepath)
                 print("Removing Comixology meta.asc file")
 
-def get_issue_number(issue):
-    fnp = filenameparser.FileNameParser()
-    fnp.parseFilename(issue)
-    return fnp.issue
-
 def get_cover_from_dir(dir):
     cover = ""
     for subdir, dirs, files in os.walk(dir):
@@ -235,4 +249,4 @@ def get_cover_from_dir(dir):
     return img
 
 if __name__ == "__main__":
-    remove_hashed_files_from_dir("D:\Downloads\AFTERLIFT (comiXology Originals) #1 (of 5)")
+    print(_get_issue_number("W.E.B. of Spider-Man #1"))
