@@ -18,8 +18,8 @@ baseUrl = 'https://leagueofcomicgeeks.com'
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
 def get_issue_by_id(id):
-    page_count = "UNKOWN"
-    price = "UNKNOWN"
+    page_count = ""
+    price = ""
     response = requests.get(id,headers=headers)
     soup = BeautifulSoup(response.text, 'html.parser')
     description = ""
@@ -29,11 +29,14 @@ def get_issue_by_id(id):
         pass
     details_section = soup.find_all("div", {"class": "col-xxl-4 col-lg-6 col-6 mb-3 details-addtl-block"})
     try:
-        page_count = details_section[1].find("div", {"class": "value"}).contents[0].strip().split()[0]
-    except:
-        pass
-    try:
-        price = details_section[2].find("div", {"class": "value"}).contents[0].strip().split()[0]
+        for item in details_section:
+            name = item.find("div", {"class": "name"}).contents[0].replace('"',"").strip()
+            value = item.find("div", {"class": "value"}).contents[0].replace('"',"").strip()
+            if name == "Cover Price":
+                price = value
+            if name == "Page Count":
+                page_count = value.split()[0]
+
     except:
         pass
     creators_section = soup.find_all("div", {"class": "d-flex flex-column align-self-center"})
@@ -231,6 +234,7 @@ def search_comics_scrape(query,volumeConfidence=0,issueConfidence=0):
     return searchResults
 
 if __name__ == "__main__":
-    #results = get_issue_by_id("https://leagueofcomicgeeks.com/comic/1717071/way-of-x-2")
-    results = get_issue_by_id("https://leagueofcomicgeeks.com/comic/6599986/teenage-mutant-ninja-turtles-the-last-ronin-1")
+    results = get_issue_by_id("https://leagueofcomicgeeks.com/comic/1717071/way-of-x-2")
+    print(results)
+    results = get_issue_by_id("https://leagueofcomicgeeks.com/comic/9467026/die-17")
     print(results)
