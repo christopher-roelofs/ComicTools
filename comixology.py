@@ -74,7 +74,11 @@ def get_series_by_id(id):
         url = f"{id}?Issues_pg={n+1}"
         response = requests.get(url, headers=headers)
         soup = BeautifulSoup(response.text, 'html.parser')
-        results = soup.find("div", {"class": "list Issues"}).find_all("li", {"class": "content-item"})
+        results = None
+        try:
+            results = soup.find("div", {"class": "list Issues"}).find_all("li", {"class": "content-item"})
+        except Exception as e:
+            return searchResults
         for result in results:
             link = result.find("a", {"class": "content-img-link"})['href']
             name = result.find("h5", {"class": "content-title"}).contents[0].partition('(')[0].strip()
@@ -330,6 +334,6 @@ def search_comics(query,volumeConfidence=0,issueConfidence=0):
 
 
 if __name__ == "__main__":
-    results = get_series_by_id("https://www.comixology.com/The-Walking-Dead-Deluxe/comics-series/148151?ref=Y29taWMvdmlldy9kZXNrdG9wL2JyZWFkY3J1bWJz")
+    results = get_series_by_id(" https://www.comixology.com/Batman-The-World-2021/comics-series/159559")
     print(results)
 
