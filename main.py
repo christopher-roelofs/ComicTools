@@ -224,13 +224,13 @@ def convert_to_image_type():
             for file in files:
                 if archiveutil.is_archive(file):
                     file = subdir + os.sep + file
-                    converted = convert_to(file,file,comicdb_info=None,image_type=image_types[val])
+                    converted = convert_to(file,file,metadata=None,image_type=image_types[val])
                     print(f"Image files in {converted} converted to {image_types[val]}")
 
     else:
         if archiveutil.is_archive(selected):
             file = selected
-            converted = convert_to(file,file,comicdb_info=None,image_type=image_types[val])
+            converted = convert_to(file,file,metadata=None,image_type=image_types[val])
             print(f"Image files in {converted} converted to {image_types[val]}")
 
 def remove_scene_promos():
@@ -362,12 +362,12 @@ def tag_interactive(filename,results=None,issues=None):
                                     #new_filename = f'{issue_name} #{comicutil.pad_to_length(issue["issueNumber"])} ({issue_year}).{ARCHIVE_TYPE.lower()}'
                                     new_filename = f"temp.{ARCHIVE_TYPE.lower()}"
                                     new_file = os.path.join(file_folder,new_filename)
-                                    meta_details = copy.deepcopy(result)
-                                    meta_details.update(issue)
-                                    converted = convert_to(filename,new_file,meta_details)
+                                    metadata = copy.deepcopy(result)
+                                    metadata.update(issue)
+                                    converted = convert_to(filename,new_file,metadata)
                                     if not KEEP_ORIGINAL and converted and filename != new_file:
                                         os.remove(filename)
-                                    move_to_library(new_file,meta_details)
+                                    move_to_library(new_file,metadata)
                                     result["last_series"] = details.series
                                     results = {"results":results,"last_series":details.series}
                                     return results, issues, ""
