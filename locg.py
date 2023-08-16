@@ -58,7 +58,7 @@ def get_issue_by_id(id):
                     credits.append(c)
         except:
             pass
-        issueObject = {}
+    issueObject = {}
     issueObject['price'] = price
     issueObject['page_count'] = page_count
     issueObject['credits'] = credits
@@ -234,7 +234,5 @@ def search_comics_scrape(query,volumeConfidence=0,issueConfidence=0):
     return searchResults
 
 if __name__ == "__main__":
-    results = get_issue_by_id("https://leagueofcomicgeeks.com/comic/1717071/way-of-x-2")
-    print(results)
-    results = get_issue_by_id("https://leagueofcomicgeeks.com/comic/9467026/die-17")
+    results = get_issue_by_id("https://leagueofcomicgeeks.com/comic/2568287/the-walking-dead-deluxe-67")
     print(results)
