@@ -17,5 +17,5 @@ if os.path.exists("version.json"):
 date = datetime.datetime.now().strftime("%d%m%Y")
 filename = os.path.join("release",f"ComicTools_{version}_{date}")
 
-PyInstaller.__main__.run(['.\main.spec','--onefile','--clean'])
+PyInstaller.__main__.run(['.\main.spec','--onefile','--clean','--upx-dir=upx/'])
 shutil.make_archive(filename, 'zip', "dist")
