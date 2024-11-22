@@ -103,7 +103,7 @@ def search_series(query,volumeConfidence=0,issueConfidence=0):
     comic_details = comicutil.get_comic_details(query)
     #url = f"{baseUrl}/comic/get_comics?addons=1&list=search&list_option=series&user_id=0&view=thumbs&format%5B%5D=1&format%5B%5D=6&format%5B%5D=5&format%5B%5D=2&format%5B%5D=3&format%5B%5D=4&date_type=&date=&date_end=&series_id=0&creators=0&character=0&title={urllib.parse.quote(comic_details.series)}&order=alpha-asc&filterCreator=1&filterCharacter=1&_={calendar.timegm(time.gmtime())}"
     url = f"{baseUrl}/comic/get_comics?addons=1&list=search&list_option=series&user_id=0&view=thumbs&format%5B%5D=1&date_type=&date=&date_end=&series_id=0&creators=0&character=0&title={urllib.parse.quote(comic_details.series)}&order=alpha-asc&filterCreator=1&filterCharacter=1&_={calendar.timegm(time.gmtime())}"
-
+    print(url)
     try:
         response = requests.get(url,headers=headers)
     except Exception as e:
@@ -116,10 +116,13 @@ def search_series(query,volumeConfidence=0,issueConfidence=0):
         volume_link = f'{baseUrl}{cover_section.find("a", {"class": "link-collection-series"})["href"]}'
         series_cover = cover_section.find("a", {"class": "link-collection-series"}).find("img")["data-src"]
         series_id = cover_section.find("a", {"class": "link-collection-series"})["data-id"]
-        publisher = series.find("div", {"class": "publisher color-offset"}).contents[0].strip()
+        publisher = series.find("span", {"class": ""}).contents[0].strip()
         series_name = series.find("div", {"class": "title color-primary"}).find("a").contents[0].strip()
-        start_year = series.find("div", {"class": "series"})['data-begin']
-        end_year =  series.find("div", {"class": "series"})['data-end']
+        start_year = series.find_all("span", {"class": ""})[1].contents[0].split()[1]
+        try:
+            end_year = series.find_all("span", {"class": ""})[1].contents[0].split()[3]
+        except:
+            end_year = "UNKNOWN"
         ratio = fuzz.ratio(series_name,comic_details.series)
         if ratio > volumeConfidence:
             series = {}

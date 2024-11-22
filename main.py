@@ -294,7 +294,7 @@ def tag_interactive(filename,results=None,issues=None):
     year_range = False
     for result in results:
         if not stop:
-            if result["end_year"] == "PRESENT" or result["end_year"] == "UNKNOWN":
+            if result["end_year"].upper() == "PRESENT" or result["end_year"] == "UNKNOWN":
                 year_range = True
             elif int(details.year) <= int(result["end_year"]):
                 year_range = True
