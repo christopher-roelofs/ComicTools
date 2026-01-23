@@ -1,6 +1,11 @@
 from PIL import Image,ImageChops, ImageStat
 import imagehash
 import requests
+try:
+    import cloudscraper
+    CLOUDSCRAPER_AVAILABLE = True
+except ImportError:
+    CLOUDSCRAPER_AVAILABLE = False
 from io import BytesIO
 import base64
 import os
@@ -13,8 +18,21 @@ def is_image(file):
     return True
 
 def getImageFromUrl(url):
-    image = requests.get(url,stream=True)
-    return Image.open(image.raw).convert('RGB')
+    headers = {
+        'User-Agent': 'comictagger/mylar3',
+        'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Referer': 'https://comicvine.gamespot.com/',
+        'DNT': '1',
+        'Connection': 'keep-alive',
+        'Sec-Fetch-Dest': 'image',
+        'Sec-Fetch-Mode': 'no-cors',
+        'Sec-Fetch-Site': 'same-origin'
+    }
+    response = requests.get(url, headers=headers, timeout=30)
+    response.raise_for_status()
+    return Image.open(BytesIO(response.content)).convert('RGB')
 
 def convert_image(file,type):
     type = type.lower()

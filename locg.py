@@ -15,7 +15,20 @@ import copy
 
 baseUrl = 'https://leagueofcomicgeeks.com'
 
-headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+headers = {
+    'User-Agent': 'comictagger/mylar3',
+    'Accept': 'application/json, text/javascript, */*; q=0.01',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Referer': 'https://leagueofcomicgeeks.com/',
+    'X-Requested-With': 'XMLHttpRequest',
+    'Sec-Ch-Ua': '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+    'Sec-Ch-Ua-Mobile': '?0',
+    'Sec-Ch-Ua-Platform': '"Windows"',
+    'Sec-Fetch-Dest': 'empty',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Site': 'same-origin'
+}
 
 def get_issue_by_id(id):
     page_count = ""
@@ -72,8 +85,17 @@ def get_series_by_id(id):
     issue_list = []
     #url = f"{baseUrl}/comic/get_comics?addons=1&list=series&list_option=&user_id=0&view=thumbs&format%5B%5D=1&format%5B%5D=5&date_type=&date=&date_end=&series_id={id}&creators=0&character=&title=&order=date-desc&_={calendar.timegm(time.gmtime())}"
     url = f"{baseUrl}/comic/get_comics?addons=1&list=series&list_option=&user_id=0&view=thumbs&format%5B%5D=1&date_type=&date=&date_end=&series_id={id}&creators=0&character=&title=&order=date-desc&_={calendar.timegm(time.gmtime())}"
-    response = requests.get(url,headers=headers)
-    soup = BeautifulSoup(json.loads(response.text)["list"], 'html.parser')
+    try:
+        response = requests.get(url,headers=headers)
+        response.raise_for_status()
+        json_data = json.loads(response.text)
+        if "list" not in json_data:
+            print(f"Error: 'list' key not found in get_series_by_id response")
+            return issue_list
+        soup = BeautifulSoup(json_data["list"], 'html.parser')
+    except (requests.RequestException, json.JSONDecodeError) as e:
+        print(f"Error fetching series {id}: {e}")
+        return issue_list
     issues = soup.find_all("li")
     for issue in issues:
         cover_section = issue.find("div", {"class": "cover"})
@@ -106,9 +128,26 @@ def search_series(query,volumeConfidence=0,issueConfidence=0):
     print(url)
     try:
         response = requests.get(url,headers=headers)
+        response.raise_for_status()
     except Exception as e:
+        print(f"Request failed: {e}")
         return results
-    soup = BeautifulSoup(json.loads(response.text)["list"], 'html.parser')
+
+    if not response.text:
+        print("Error: Empty response from API")
+        return results
+
+    try:
+        json_data = json.loads(response.text)
+        if "list" not in json_data:
+            print(f"Error: 'list' key not found in response. Response: {response.text[:500]}")
+            return results
+        print(json_data["list"])
+        soup = BeautifulSoup(json_data["list"], 'html.parser')
+    except json.JSONDecodeError as e:
+        print(f"Error: Invalid JSON response (status {response.status_code})")
+        print(f"Response content: {response.text[:500]}")
+        return results
     all_series = soup.find_all("li")
     for series in all_series:
         issue_count = series.find("span", {"class": "details count-issues"}).contents[0].strip()
@@ -148,9 +187,15 @@ def search_comics(query,volumeConfidence=0,issueConfidence=0):
     url = f"{baseUrl}/comic/get_comics?addons=1&list=search&list_option=series&user_id=0&view=thumbs&format%5B%5D=1&format%5B%5D=6&format%5B%5D=5&format%5B%5D=2&format%5B%5D=3&format%5B%5D=4&date_type=&date=&date_end=&series_id=0&creators=0&character=0&title={urllib.parse.quote(comic_details.series)}&order=alpha-asc&filterCreator=1&filterCharacter=1&_={calendar.timegm(time.gmtime())}"
     try:
         response = requests.get(url,headers=headers)
-    except Exception as e:
+        response.raise_for_status()
+        json_data = json.loads(response.text)
+        if "list" not in json_data:
+            print(f"Error: 'list' key not found in search_comics response")
+            return results
+        soup = BeautifulSoup(json_data["list"], 'html.parser')
+    except (requests.RequestException, json.JSONDecodeError) as e:
+        print(f"Error in search_comics: {e}")
         return results
-    soup = BeautifulSoup(json.loads(response.text)["list"], 'html.parser')
     all_series = soup.find_all("li")
     for series in all_series:
         cover_section = series.find("div", {"class": "cover"})
@@ -237,5 +282,5 @@ def search_comics_scrape(query,volumeConfidence=0,issueConfidence=0):
     return searchResults
 
 if __name__ == "__main__":
-    results = get_issue_by_id("https://leagueofcomicgeeks.com/comic/2568287/the-walking-dead-deluxe-67")
+    results = search_series("")
     print(results)
